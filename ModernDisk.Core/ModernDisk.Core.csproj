@@ -6,8 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DiscUtils.Core" Version="1.3.41" />
-    <PackageReference Include="DiscUtils.Iso9660" Version="1.3.41" />
-    <PackageReference Include="IMAPI2" Version="1.0.0" />
+    <PackageReference Include="DiscUtils.Core" Version="0.16.13" />
+    <PackageReference Include="DiscUtils.Iso9660" Version="0.16.13" />
   </ItemGroup>
 </Project>

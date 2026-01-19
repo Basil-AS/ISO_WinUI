@@ -57,8 +57,7 @@ namespace ModernDisk.Core.Services
                 var builder = new CDBuilder
                 {
                     UseJoliet = true,
-                    VolumeIdentifier = label,
-                    SystemIdentifier = "Windows"
+                    VolumeIdentifier = label
                 };
 
                 var state = new ProgressState(allFiles, totalBytes);

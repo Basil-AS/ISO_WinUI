@@ -1,0 +1,5 @@
+<Project>
+  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+    <UseXamlCompilerExecutable>false</UseXamlCompilerExecutable>
+  </PropertyGroup>
+</Project>

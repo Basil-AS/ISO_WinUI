@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using IMAPI2Lib;
 using ModernDisk.Core.Interop;
 
 namespace ModernDisk.Core.Services
@@ -37,14 +36,14 @@ namespace ModernDisk.Core.Services
         public IReadOnlyList<RecorderInfo> GetAvailableRecorders()
         {
             var recorders = new List<RecorderInfo>();
-            var discMaster = new MsftDiscMaster2();
+            var discMaster = CreateComInstance("IMAPI2.MsftDiscMaster2");
 
             foreach (var recorderId in discMaster)
             {
                 if (recorderId is not string id || string.IsNullOrWhiteSpace(id))
                     continue;
 
-                var recorder = new MsftDiscRecorder2();
+                var recorder = CreateComInstance("IMAPI2.MsftDiscRecorder2");
                 recorder.InitializeDiscRecorder(id);
 
                 string name = string.Join(" ", new[] { recorder.ManufacturerID, recorder.ProductID })
@@ -85,18 +84,16 @@ namespace ModernDisk.Core.Services
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var recorder = new MsftDiscRecorder2();
+                    var recorder = CreateComInstance("IMAPI2.MsftDiscRecorder2");
                     recorder.InitializeDiscRecorder(recorderId);
 
-                    var dataWriter = new MsftDiscFormat2Data
-                    {
-                        Recorder = recorder,
-                        ClientName = "ModernDiskUtility",
-                        VerificationLevel = IMAPI_BURN_VERIFICATION_LEVEL.IMAPI_BURN_VERIFICATION_FULL,
-                        BufferUnderrunFreeDisabled = 0
-                    };
+                    dynamic dataWriter = CreateComInstance("IMAPI2.MsftDiscFormat2Data");
+                    dataWriter.Recorder = recorder;
+                    dataWriter.ClientName = "ModernDiskUtility";
+                    dataWriter.VerificationLevel = (int)ImapiBurnVerificationLevel.Full;
+                    dataWriter.BufferUnderrunFreeDisabled = 0;
 
-                    DDiscFormat2DataEvents_OnProgressEvent? handler = null;
+                    Action<object, long, long>? handler = null;
                     handler = (object sender, long elapsedTime, long estimatedTotalTime) =>
                     {
                         progress?.Report(new WriteProgress
@@ -137,6 +134,23 @@ namespace ModernDisk.Core.Services
             thread.Start();
 
             return tcs.Task;
+        }
+
+        private static dynamic CreateComInstance(string progId)
+        {
+            var type = Type.GetTypeFromProgID(progId);
+            if (type == null)
+                throw new PlatformNotSupportedException($"COM ProgID '{progId}' is not available on this system.");
+
+            return Activator.CreateInstance(type)
+                ?? throw new InvalidOperationException($"Unable to create COM instance for '{progId}'.");
+        }
+
+        private enum ImapiBurnVerificationLevel
+        {
+            None = 0,
+            Quick = 1,
+            Full = 2
         }
     }
 }

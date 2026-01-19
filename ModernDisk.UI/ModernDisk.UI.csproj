@@ -7,12 +7,42 @@
     <UseWinUI>true</UseWinUI>
     <WindowsPackageType>None</WindowsPackageType>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RuntimeIdentifierGraphPath>$(MSBuildSDKsPath)/../RuntimeIdentifierGraph.json</RuntimeIdentifierGraphPath>
+    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <UseXamlCompilerExecutable>false</UseXamlCompilerExecutable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.240105001" />
-    <PackageReference Include="CommunityToolkit.WinUI" Version="8.1.240109" />
+  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <UseWinUI>false</UseWinUI>
+    <EnableWindowsTargeting>false</EnableWindowsTargeting>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260101001" />
+    <PackageReference Include="CommunityToolkit.WinUI" Version="7.1.2" />
+    <PackageReference Include="System.Security.Permissions" Version="6.0.0" PrivateAssets="all" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(OS)' != 'Windows_NT'">
+    <Page Remove="**/*.xaml" />
+    <Compile Remove="**/*.xaml.cs" />
+    <Compile Remove="App.xaml.cs" />
+    <Compile Remove="MainWindow.xaml.cs" />
+  </ItemGroup>
+
+  <Target Name="EnsureXamlCompilerDependencies" BeforeTargets="MarkupCompilePass1" Condition="'$(OS)' == 'Windows_NT'">
+    <PropertyGroup>
+      <XamlCompilerToolsDir>$([System.IO.Path]::GetDirectoryName($(XamlCompilerTaskPath)))</XamlCompilerToolsDir>
+      <SystemSecurityPermissionsDll>$(NuGetPackageRoot)system.security.permissions/6.0.0/lib/net6.0/System.Security.Permissions.dll</SystemSecurityPermissionsDll>
+    </PropertyGroup>
+    <ItemGroup>
+      <XamlCompilerDependency Include="$(SystemSecurityPermissionsDll)" Condition="Exists('$(SystemSecurityPermissionsDll)')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(XamlCompilerDependency)" DestinationFolder="$(XamlCompilerToolsDir)" SkipUnchangedFiles="true" />
+  </Target>
 
   <ItemGroup>
     <ProjectReference Include="..\ModernDisk.Core\ModernDisk.Core.csproj" />
