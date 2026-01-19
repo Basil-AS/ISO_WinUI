@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernDisk.Core", "ModernDisk.Core\\ModernDisk.Core.csproj", "{2A4CF7F6-409A-4C16-AB49-F3112C4C6773}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModernDisk.UI", "ModernDisk.UI\\ModernDisk.UI.csproj", "{18DC5050-E559-4BE3-A841-D704DAF63278}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A4CF7F6-409A-4C16-AB49-F3112C4C6773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A4CF7F6-409A-4C16-AB49-F3112C4C6773}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A4CF7F6-409A-4C16-AB49-F3112C4C6773}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A4CF7F6-409A-4C16-AB49-F3112C4C6773}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18DC5050-E559-4BE3-A841-D704DAF63278}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18DC5050-E559-4BE3-A841-D704DAF63278}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18DC5050-E559-4BE3-A841-D704DAF63278}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18DC5050-E559-4BE3-A841-D704DAF63278}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {789B33A0-89FF-4F49-950D-BCA95159FCDB}
+	EndGlobalSection
+EndGlobal
